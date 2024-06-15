@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15.4
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: mar
+      POSTGRES_DB: tab
+      POSTGRES_PASSWORD: 12345
+      TZ: Asia/Manila
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready', '-d', 'ews']
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+volumes:
+  pgdata:
+    external: true
+
+networks:
+  my-network:
+    external: true
